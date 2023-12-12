@@ -1,7 +1,14 @@
-export default function Student() {
+import { authOptions } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
+import SignOut from '../../components/signout/SignOut';
+
+export default async function Student() {
+  const session = await getServerSession(authOptions);
+  console.log(session);
   return (
     <div>
-      <h1>Welcome to the Student Page</h1>
+      <SignOut />
+      <h1>Welcome to the Quiz Page, {session?.user.username}!</h1>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { compare } from 'bcrypt';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
   },
@@ -41,8 +42,6 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        console.log('existing user: ', existingUser);
-
         return {
           id: existingUser.id,
           email: existingUser.email,
@@ -53,22 +52,30 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    jwt: async ({ token, user }) => {
+    async jwt({ token, user }) {
       if (user) {
-        token.uid = user;
+        return {
+          ...token,
+          role: user.role,
+          username: user.username,
+        };
       }
 
       return token;
     },
-    session: async ({ session, token }: any) => {
-      console.log('token ', token);
+    async session({ session, token }) {
       // here we put session.useData and put inside it whatever you want to be in the session
       // here try to console.log(token) and see what it will have
       // sometimes the user get stored in token.uid.userData
       // sometimes the user data get stored in just token.uid
-      (session.user.role = token.uid.role), console.log('session ', session);
-
-      return session;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          role: token.role,
+          username: token.username,
+        },
+      };
     },
   },
 };
