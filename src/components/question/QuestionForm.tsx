@@ -124,19 +124,9 @@ const QuestionForm = () => {
           </div>
         );
       case 'multipleResponse':
-        return (
-          <>
-            {/* Additional fields for Multiple Response questions */}
-            {/* Implement similar to Multiple Choice with checkboxes */}
-          </>
-        );
+        return <></>;
       case 'trueFalse':
-        return (
-          <>
-            {/* Additional fields for True or False questions */}
-            {/* Implement similar to Multiple Choice with two options (True/False) */}
-          </>
-        );
+        return <></>;
       case 'shortAnswer':
         return (
           <>
