@@ -64,10 +64,6 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      // here we put session.useData and put inside it whatever you want to be in the session
-      // here try to console.log(token) and see what it will have
-      // sometimes the user get stored in token.uid.userData
-      // sometimes the user data get stored in just token.uid
       return {
         ...session,
         user: {

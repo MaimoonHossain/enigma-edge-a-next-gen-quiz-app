@@ -3,7 +3,7 @@
 import { getSession, signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 // components/SignInForm.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useToast } from '@/components/ui/use-toast';
 import Link from 'next/link';
@@ -38,23 +38,33 @@ const SignInForm = () => {
       // Check the user's role
       console.log('session', session);
 
-      if (
-        !signInData?.error &&
-        session?.user &&
-        session.user.role === 'teacher'
-      ) {
-        router.push('/dashboard');
-      } else if (
-        !signInData?.error &&
-        session?.user &&
-        session.user.role === 'student'
-      ) {
-        router.push('/student');
-      }
+      // if (
+      //   !signInData?.error &&
+      //   session?.user &&
+      //   session.user.role === 'teacher'
+      // ) {
+      //   router.push('/dashboard');
+      // } else if (
+      //   !signInData?.error &&
+      //   session?.user &&
+      //   session.user.role === 'student'
+      // ) {
+      //   router.push('/student');
+      // }
     } catch (error) {
       console.error('Error during sign in:', error);
     }
   };
+
+  useEffect(() => {
+    if (session?.user) {
+      if (session.user.role === 'teacher') {
+        router.push('/dashboard');
+      } else if (session.user.role === 'student') {
+        router.push('/student');
+      }
+    }
+  }, [session]);
 
   return (
     <div className='max-w-md mx-auto mt-10 p-6 bg-gray-100 rounded-md shadow-md'>
