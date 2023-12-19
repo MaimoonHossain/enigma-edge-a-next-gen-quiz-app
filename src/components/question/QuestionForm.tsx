@@ -39,7 +39,7 @@ const QuestionForm = () => {
     ]);
   };
 
-  const handleRemoveQuestion = (index) => {
+  const handleRemoveQuestion = ({ index }: any) => {
     setQuestions((prevQuestions) => {
       const newQuestions = [...prevQuestions];
       newQuestions.splice(index, 1);
@@ -166,28 +166,23 @@ const QuestionForm = () => {
         >
           Type of Question
         </label>
-        <Controller
-          control={control}
-          name='questionType'
-          render={({ field }) => (
-            <select
-              {...field}
-              className='border rounded-md py-2 px-3 w-full'
-              onChange={(e) => setSelectedQuestionType(e.target.value)}
-            >
-              <option value='multipleChoice'>Multiple-Choice</option>
-              <option value='multipleResponse'>Multiple Response</option>
-              <option value='trueFalse'>True or False</option>
-              <option value='shortAnswer'>Short Answer</option>
-            </select>
-          )}
-        />
+        <select
+          {...register('selectedQuestionType')}
+          value={selectedQuestionType}
+          onChange={(e) => setSelectedQuestionType(e.target.value)}
+          className='border rounded-md py-2 px-3 w-full'
+        >
+          <option value='multipleChoice'>Multiple-Choice</option>
+          <option value='multipleResponse'>Multiple Response</option>
+          <option value='trueFalse'>True or False</option>
+          <option value='shortAnswer'>Short Answer</option>
+        </select>
       </div>
 
       {/* Other form fields based on the question type */}
-      {questions.map((question, index) =>
-        renderAdditionalFields({ question, index })
-      )}
+      {questions.map((question, index) => (
+        <div key={index}>{renderAdditionalFields({ question, index })}</div>
+      ))}
 
       <button
         type='submit'
