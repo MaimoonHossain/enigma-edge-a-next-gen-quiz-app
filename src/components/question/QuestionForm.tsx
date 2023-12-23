@@ -3,6 +3,7 @@
 import { MinusCircle, PlusCircle } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import MultipleChoiceQuestion from './MultipleChoiceQuestion';
 
 const QuestionForm = () => {
   const {
@@ -11,8 +12,7 @@ const QuestionForm = () => {
     control,
     formState: { errors },
   } = useForm();
-  const [selectedQuestionType, setSelectedQuestionType] =
-    useState('multipleChoice');
+  const [type, setType] = useState('multipleChoice');
 
   const [questions, setQuestions] = useState([
     {
@@ -24,7 +24,45 @@ const QuestionForm = () => {
   ]);
 
   const onSubmit = async (data: any) => {
-    console.log(data);
+    console.log('initial data', data);
+    const { quizTitle, type, questions } = data;
+
+    // Map the type to each question object
+    const questionsWithType = questions.map((question: any) => {
+      return { ...question, type: type };
+    });
+
+    // Create the final data object
+    const finalData = {
+      quizTitle,
+      questions: questionsWithType,
+    };
+
+    console.log('submitted data from client, ', finalData);
+
+    try {
+      const response = await fetch('/api/submitQuiz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(finalData),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('Quiz submitted successfully:', responseData.quiz);
+        // Handle success, e.g., redirect to a success page
+      } else {
+        console.error('Error submitting quiz:', response.statusText);
+        // Handle error, e.g., display an error message
+      }
+    } catch (error: any) {
+      console.error('Error submitting quiz:', error?.message);
+      // Handle error, e.g., display an error message
+    }
+
+    // Now you can submit the data to your API or perform other actions
   };
 
   const handleAddQuestion = () => {
@@ -48,80 +86,16 @@ const QuestionForm = () => {
   };
 
   const renderAdditionalFields = ({ question, index }: any) => {
-    switch (selectedQuestionType) {
+    switch (type) {
       case 'multipleChoice':
-        const options = ['option1', 'option2', 'option3', 'option4'];
-
         return (
-          <div key={index} className='mb-8'>
-            {/* Question text input */}
-            <div className='mb-4'>
-              <label
-                htmlFor={`questions[${index}].question`}
-                className='block text-gray-700 text-sm font-bold mb-2'
-              >
-                Question {index + 1}
-              </label>
-              <input
-                type='text'
-                id={`questions[${index}].question`}
-                {...register(`questions[${index}].question`, {
-                  required: 'Question is required',
-                })}
-                className='border rounded-md py-2 px-3 w-full'
-              />
-              {errors[`questions[${index}].question`] && (
-                <p className='text-red-500 text-sm mt-1'>
-                  {String(errors[`questions[${index}].question`]?.message)}
-                </p>
-              )}
-            </div>
-
-            {/* Additional fields for Multiple Choice questions */}
-            {options.map((option, optionIndex) => (
-              <div key={optionIndex} className='mb-4'>
-                <label
-                  htmlFor={`questions[${index}].options[${optionIndex}]`}
-                  className='block text-gray-700 text-sm font-bold mb-2'
-                >
-                  {`Option ${optionIndex + 1}`}
-                </label>
-                <input
-                  type='text'
-                  {...register(`questions[${index}].options[${optionIndex}]`)}
-                  className='border rounded-md py-2 px-3 w-full'
-                />
-                <label className='block text-gray-700 text-sm mt-2'>
-                  <input
-                    type='radio'
-                    {...register(`questions[${index}].correctOption`)}
-                    value={optionIndex}
-                    className='mr-2'
-                  />
-                  Correct Answer
-                </label>
-              </div>
-            ))}
-            <div className='flex mt-4'>
-              <button
-                type='button'
-                onClick={handleAddQuestion}
-                className='bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 mr-2'
-              >
-                <PlusCircle size={20} />
-              </button>
-
-              {questions.length > 1 && (
-                <button
-                  type='button'
-                  onClick={() => handleRemoveQuestion(index)}
-                  className='bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600'
-                >
-                  <MinusCircle size={20} />
-                </button>
-              )}
-            </div>
-          </div>
+          <MultipleChoiceQuestion
+            register={register}
+            index={index}
+            errors={errors}
+            handleAddQuestion={handleAddQuestion}
+            handleRemoveQuestion={handleRemoveQuestion}
+          />
         );
       case 'multipleResponse':
         return <></>;
@@ -157,6 +131,22 @@ const QuestionForm = () => {
       className='max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md'
     >
       <h2 className='text-2xl font-semibold mb-6'>Create a Quiz</h2>
+      <label
+        htmlFor='quizTitle'
+        className='block text-gray-700 text-sm font-bold mb-2'
+      >
+        Quiz Title
+      </label>
+      <input
+        type='text'
+        {...register('quizTitle', { required: 'Quiz title is required' })}
+        className='border rounded-md py-2 px-3 w-full'
+      />
+      {errors.quizTitle && (
+        <p className='text-red-500 text-sm mt-1'>
+          {String(errors.quizTitle.message)}
+        </p>
+      )}
 
       {/* Type of question select */}
       <div className='mb-4'>
@@ -167,9 +157,9 @@ const QuestionForm = () => {
           Type of Question
         </label>
         <select
-          {...register('selectedQuestionType')}
-          value={selectedQuestionType}
-          onChange={(e) => setSelectedQuestionType(e.target.value)}
+          {...register('type')}
+          value={type}
+          onChange={(e) => setType(e.target.value)}
           className='border rounded-md py-2 px-3 w-full'
         >
           <option value='multipleChoice'>Multiple-Choice</option>

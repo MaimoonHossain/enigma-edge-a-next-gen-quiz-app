@@ -18,4 +18,25 @@ model User {
   role      String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+  Quiz      Quiz[]
+}
+
+model Quiz {
+  id        Int        @id @default(autoincrement())
+  title     String
+  ownerId   Int // Assuming a quiz belongs to a user
+  owner     User       @relation(fields: [ownerId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime?  @updatedAt
+  questions Question[]
+}
+
+model Question {
+  id            Int      @id @default(autoincrement())
+  quizId        Int
+  quiz          Quiz     @relation(fields: [quizId], references: [id])
+  type          String // 'multipleChoice', 'multipleResponse', 'trueFalse', 'shortAnswer', etc.
+  questionText  String
+  options       String[] // You may want to adjust the type based on your needs
+  correctOption Int? // You may want to adjust the type based on your needs
 }
