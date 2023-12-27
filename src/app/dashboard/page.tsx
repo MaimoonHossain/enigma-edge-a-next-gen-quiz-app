@@ -20,7 +20,7 @@ export default async function Dashboard() {
       </h1>
 
       {/* Main module - Create Question */}
-      <QuestionForm />
+      <QuestionForm ownerId={session.user.id} />
 
       {/* Add more modules for other functionalities as needed */}
     </div>

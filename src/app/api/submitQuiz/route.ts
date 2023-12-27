@@ -1,30 +1,31 @@
 // pages/api/submitQuiz.js
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import prisma from '@/lib/prisma';
+import getServerSession from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: Request, res: NextApiResponse) {
-  const session = await getSession();
+export async function POST(req: NextRequest, res: NextResponse) {
+  const data = await req.json();
+  console.log('data', data);
 
-  // if (!session) {
-  //   return res.status(401).json({ error: 'Unauthorized' });
-  // }
+  // return NextResponse.json(data);
 
-  // const body = await req.json();
+  if (!data.ownerId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-  // const { email, username, password, role } = body;
-
-  console.log('I am outside post ', req.body);
+  // console.log('I am outside post ', req.json());
 
   if (req.method === 'POST') {
     try {
-      const body = await req.json();
-      console.log('Hello from post', body);
-      const { quizTitle, type, questions } = body;
+      // const body = await req.json();
+      // console.log('Hello from post', body);
+      const { quizTitle, type, questions, ownerId } = data;
       console.log('I am from post ', quizTitle, questions);
 
       // Assume the owner's user ID is in the session
-      const ownerId = session?.user.id ? session.user.id : '1';
 
       const quiz = await prisma.quiz.create({
         data: {
@@ -41,12 +42,15 @@ export async function POST(req: Request, res: NextApiResponse) {
         },
       });
 
-      res.status(200).json({ success: true, quiz });
+      return NextResponse.json({ success: true, quiz }, { status: 200 });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      return NextResponse.json(
+        { error: 'Internal Server Error' },
+        { status: 500 }
+      );
     }
   } else {
-    res.status(405).json({ error: 'Method Not Allowed' });
+    return NextResponse.json({ error: 'Method Not Allowed' }, { status: 405 });
   }
 }

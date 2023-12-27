@@ -4,8 +4,9 @@ import { MinusCircle, PlusCircle } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import MultipleChoiceQuestion from './MultipleChoiceQuestion';
+import { toast } from '../ui/use-toast';
 
-const QuestionForm = () => {
+const QuestionForm = (ownerId: any) => {
   const {
     register,
     handleSubmit,
@@ -34,6 +35,7 @@ const QuestionForm = () => {
 
     // Create the final data object
     const finalData = {
+      ownerId: ownerId.ownerId,
       quizTitle,
       questions: questionsWithType,
     };
@@ -50,15 +52,26 @@ const QuestionForm = () => {
       });
 
       if (response.ok) {
-        const responseData = await response.json();
-        console.log('Quiz submitted successfully:', responseData.quiz);
-        // Handle success, e.g., redirect to a success page
+        toast({
+          title: 'Success',
+          description: 'Quiz created successfully',
+          style: { background: 'green', color: 'white' },
+        });
       } else {
-        console.error('Error submitting quiz:', response.statusText);
-        // Handle error, e.g., display an error message
+        toast({
+          title: 'Error',
+          description: 'Something went wrong',
+          variant: 'destructive',
+          style: { background: 'red', color: 'white' },
+        });
       }
     } catch (error: any) {
-      console.error('Error submitting quiz:', error?.message);
+      toast({
+        title: 'Error',
+        description: 'Error submitting quiz',
+        variant: 'destructive',
+        style: { background: 'red', color: 'white' },
+      });
       // Handle error, e.g., display an error message
     }
 
