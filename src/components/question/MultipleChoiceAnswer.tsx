@@ -1,23 +1,45 @@
 // components/QuizForm.js
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
 const MultipleChoiceAnswer = (quiz: any) => {
-  console.log(quiz);
-  const { questions } = quiz;
-  // const handleOptionChange = (questionIndex, optionIndex) => {
-  //   // Implement logic to handle option changes
-  //   console.log(`Selected option ${optionIndex} for question ${questionIndex}`);
-  // };
+  const questions = quiz.quiz.questions;
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [key: number]: number;
+  }>({});
+  const [showResult, setShowResult] = useState(false);
 
-  // const handleSubmit = () => {
-  //   // Implement logic to handle form submission
-  //   console.log('Form submitted');
-  //   // onSubmit(); // Call the onSubmit callback (you can replace it with actual submission logic)
-  // };
+  const handleOptionChange = (questionIndex: any, optionIndex: any) => {
+    setSelectedOptions((prevOptions) => ({
+      ...prevOptions,
+      [questionIndex]: optionIndex,
+    }));
+  };
+
+  const checkAnswer = (questionIndex: any) => {
+    const selectedOption = selectedOptions[questionIndex];
+    const correctOption = questions[questionIndex].correctOption;
+    return selectedOption === correctOption;
+  };
+
+  const calculateResult = () => {
+    const correctCount = questions.reduce(
+      (count: any, _: any, index: any) =>
+        checkAnswer(index) ? count + 1 : count,
+      0
+    );
+    const percentage = (correctCount / questions.length) * 100;
+    return { correctCount, percentage };
+  };
+
+  const handleSubmit = () => {
+    setShowResult(true);
+  };
+
+  const result = calculateResult();
 
   return (
-    <div>
+    <div className='max-w-lg mx-auto mt-8 p-4 bg-white shadow-md rounded-md'>
       {questions.map((question: any, index: any) => (
         <div key={index} className='mb-8'>
           <div className='mb-4'>
@@ -27,7 +49,7 @@ const MultipleChoiceAnswer = (quiz: any) => {
             >
               Question {index + 1}
             </label>
-            <p>{question.text}</p>
+            <p>{question.questionText}</p>
           </div>
 
           <div>
@@ -43,21 +65,49 @@ const MultipleChoiceAnswer = (quiz: any) => {
                   type='radio'
                   name={`questions[${index}].selectedOption`}
                   value={optionIndex}
-                  // onChange={() => handleOptionChange(index, optionIndex)}
-                  className='mr-2'
+                  checked={selectedOptions[index] === optionIndex}
+                  onChange={() => handleOptionChange(index, optionIndex)}
+                  className='mr-2 focus:ring-blue-500 focus:border-blue-500'
                 />
                 {option}
               </div>
             ))}
           </div>
+
+          {/* Display correctness feedback */}
+          {/* {showResult && (
+            <p
+              className={`text-lg font-bold ${
+                checkAnswer(index) ? 'text-green-500' : 'text-red-500'
+              }`}
+            >
+              {checkAnswer(index) ? 'Correct' : 'Incorrect'}
+            </p>
+          )} */}
         </div>
       ))}
+
+      {showResult && (
+        <div className='mt-4'>
+          <p className='text-lg font-bold'>
+            Result: {result.correctCount}/{questions.length} (
+            {result.percentage.toFixed(2)}%)
+          </p>
+          <p
+            className={`text-xl font-bold ${
+              result.percentage >= 50 ? 'text-green-500' : 'text-red-500'
+            }`}
+          >
+            {result.percentage >= 50 ? 'Passed' : 'Failed'}
+          </p>
+        </div>
+      )}
 
       <div className='mt-4'>
         <button
           type='button'
-          // onClick={handleSubmit}
-          className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600'
+          onClick={handleSubmit}
+          className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300'
         >
           Submit Exam
         </button>
