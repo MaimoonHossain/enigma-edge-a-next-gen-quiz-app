@@ -35,8 +35,8 @@ model Question {
   id            Int      @id @default(autoincrement())
   quizId        Int
   quiz          Quiz     @relation(fields: [quizId], references: [id])
-  type          String // 'multipleChoice', 'multipleResponse', 'trueFalse', 'shortAnswer', etc.
+  type          String
   questionText  String
-  options       String[] // You may want to adjust the type based on your needs
-  correctOption Int? // You may want to adjust the type based on your needs
+  options       String[]
+  correctOption Int? 
 }
