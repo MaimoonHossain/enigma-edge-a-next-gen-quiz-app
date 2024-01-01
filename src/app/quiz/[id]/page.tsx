@@ -1,14 +1,23 @@
 import { useRouter } from 'next/router';
 import prisma from '@/lib/prisma';
-import MultipleChoiceAnswer from '@/components/question/MultipleChoiceAnswer';
+import MultipleChoiceAnswer from './../../../components/question/MultipleChoiceAnswer';
 import { useState } from 'react';
 import { getQuizData } from '@/lib/getQuizData';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export default async function QuizPage({ params }: { params: { id: string } }) {
   // const router = useRouter();
   // const { quizId } = router.query;
   // console.log('helllllloooo');
   const quiz = await getData(params.id);
+
+  const session = await getServerSession(authOptions);
+
+  console.log('session again', session);
+
+  const username = session?.user?.username;
+  const userId = session?.user?.id;
 
   console.log('quiz', quiz);
 
@@ -25,7 +34,7 @@ export default async function QuizPage({ params }: { params: { id: string } }) {
     <div>
       <h1>{quiz.title}</h1>
       {/* Render the quiz form based on the data from the 'quiz' object */}
-      <MultipleChoiceAnswer quiz={quiz} />
+      <MultipleChoiceAnswer quiz={quiz} username={username} userId={userId} />
     </div>
   );
 }

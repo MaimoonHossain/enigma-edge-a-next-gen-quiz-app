@@ -24,7 +24,10 @@ export default async function Student() {
   if (session?.user.role !== 'student') {
     redirect('/signin');
   }
-  console.log(session);
+  console.log('session', session);
+
+  const username = session?.user?.username;
+  const userId = session?.user?.id;
 
   return (
     <div>
