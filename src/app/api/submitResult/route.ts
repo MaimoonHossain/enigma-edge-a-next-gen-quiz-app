@@ -16,19 +16,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   if (req.method === 'POST') {
     try {
-      // const body = await req.json();
-      // console.log('Hello from post', body);
       const { quizId, status, percentage, username, userId } = data;
 
-      // Assume the owner's user ID is in the session
 
       const quizResult = await prisma.quizResult.create({
         data: {
           username: username,
           quizId: parseInt(quizId),
           userId: parseInt(userId),
-          percentage: percentage, // Implement this function
-          status: status, // Implement this function
+          percentage: percentage,
+          status: status, 
         },
       });
 
