@@ -25,11 +25,6 @@ export default async function QuizPage({ params }: { params: { id: string } }) {
     return <div>Quiz not found</div>;
   }
 
-  // if (!quiz) {
-  //   // Handle the case where the quiz is not found
-  //   return <div>Quiz not found</div>;
-  // }
-
   return (
     <div>
       <h1>{quiz.title}</h1>
