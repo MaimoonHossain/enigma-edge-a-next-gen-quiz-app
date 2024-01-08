@@ -19,7 +19,7 @@ const SignInForm = () => {
       const signInData = await signIn('credentials', {
         email: data.email,
         password: data.password,
-        redirect: false, // Do not redirect automatically
+        redirect: false,
       });
 
       console.log('signInData', signInData);
@@ -33,9 +33,6 @@ const SignInForm = () => {
         });
       }
 
-      // Access the user object from the session
-
-      // Check the user's role
       console.log('session', session);
 
       // if (
