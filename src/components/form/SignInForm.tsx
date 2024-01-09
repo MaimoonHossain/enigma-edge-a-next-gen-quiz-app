@@ -2,7 +2,6 @@
 
 import { getSession, signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-// components/SignInForm.js
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useToast } from '@/components/ui/use-toast';
@@ -34,20 +33,6 @@ const SignInForm = () => {
       }
 
       console.log('session', session);
-
-      // if (
-      //   !signInData?.error &&
-      //   session?.user &&
-      //   session.user.role === 'teacher'
-      // ) {
-      //   router.push('/dashboard');
-      // } else if (
-      //   !signInData?.error &&
-      //   session?.user &&
-      //   session.user.role === 'student'
-      // ) {
-      //   router.push('/student');
-      // }
     } catch (error) {
       console.error('Error during sign in:', error);
     }
