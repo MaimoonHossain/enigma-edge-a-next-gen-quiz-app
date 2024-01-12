@@ -1,4 +1,3 @@
-// components/QuestionForm.js
 'use client';
 import { MinusCircle, PlusCircle } from 'lucide-react';
 import React, { useState } from 'react';
