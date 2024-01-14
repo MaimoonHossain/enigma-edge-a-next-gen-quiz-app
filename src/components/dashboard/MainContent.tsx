@@ -5,29 +5,29 @@ export default function MainContent() {
     <div className='p-4 sm:ml-64'>
       <div className='p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14'>
         <div className='grid grid-cols-3 gap-4 mb-4'>
-          <div className='flex col-span-2 items-center justify-evenly h-24 rounded bg-gray-50 dark:bg-gray-800'>
-            <div className='grid grid-cols-3 gap-4'>
+          <div className='flex col-span-2 items-center justify-evenly h-24 rounded border border-gray-40000 dark:bg-gray-800'>
+            <div className='flex justify-between'>
               {/* Card 1: Total Participants */}
-              <div className='flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800'>
-                <div className='p-4 border border-gray-200 border-dashed rounded-lg dark:border-gray-700'>
+              <div className='flex h-24 rounded-lg shadow-lg bg-white dark:bg-gray-800 mx-4'>
+                <div className='p-4'>
                   <p className='text-lg font-semibold'>Total Participants</p>
-                  <p className='text-2xl text-gray-400 dark:text-gray-500'>
+                  <p className='text-2xl text-gray-600 dark:text-gray-500'>
                     100
                   </p>
                 </div>
               </div>
 
               {/* Card 2: Total Passed */}
-              <div className='flex items-center justify-center h-24 rounded bg-gray-100 dark:bg-gray-800'>
-                <div className='p-4 border border-gray-200 border-dashed rounded-lg dark:border-gray-700'>
+              <div className='flex h-24 rounded-lg shadow-lg bg-white dark:bg-gray-800 mx-4'>
+                <div className='p-4'>
                   <p className='text-lg font-semibold'>Total Passed</p>
                   <p className='text-2xl text-green-500'>75</p>
                 </div>
               </div>
 
               {/* Card 3: Total Failed */}
-              <div className='flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800'>
-                <div className='p-4 border border-gray-200 border-dashed rounded-lg dark:border-gray-700'>
+              <div className='flex h-24 rounded-lg shadow-lg bg-white dark:bg-gray-800 mx-4'>
+                <div className='p-4'>
                   <p className='text-lg font-semibold'>Total Failed</p>
                   <p className='text-2xl text-red-500'>25</p>
                 </div>
@@ -35,23 +35,30 @@ export default function MainContent() {
             </div>
           </div>
           {/* Second column */}
-          <div className='rounded bg-gray-100 dark:bg-gray-800'>
-            <p className='p-2 text-lg font-semibold text-center'>
+          <div className='rounded bg-white shadow-lg dark:bg-gray-800'>
+            <p className='pt-2 text-lg font-semibold text-center'>
               Result Summary
             </p>
+            <p className='text-center'>This month result</p>
 
             <div className='flex flex-row gap-4 align-center justify-evenly'>
-              <div className='p-2 border border-gray-200 border-dashed rounded-lg dark:border-gray-700'>
+              <div className='p-2 rounded-lg dark:border-gray-700'>
                 <p>Highest</p>
-                <p className='text-2xl text-gray-400 dark:text-gray-500'>100</p>
+                <p className='text-xl font-bold text-center dark:text-gray-500'>
+                  100
+                </p>
               </div>
-              <div className='p-2 border border-gray-200 border-dashed rounded-lg dark:border-gray-700'>
+              <div className='p-2 rounded-lg dark:border-gray-700'>
                 <p>Average</p>
-                <p className='text-2xl text-gray-400 dark:text-gray-500'>100</p>
+                <p className='text-xl font-bold text-center dark:text-gray-500'>
+                  50
+                </p>
               </div>
-              <div className='p-2 border border-gray-200 border-dashed rounded-lg dark:border-gray-700'>
+              <div className='p-2 rounded-lg dark:border-gray-700'>
                 <p>Lowest</p>
-                <p className='text-2xl text-gray-400 dark:text-gray-500'>100</p>
+                <p className='text-xl font-bold text-center dark:text-gray-500'>
+                  20
+                </p>
               </div>
             </div>
           </div>
